@@ -5,25 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <style>
-        /* Dark Mode Styles */
+        /* Default Light Mode */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --input-bg: #ffffff;
+            --bot-bg: #e9ecef;
+            --user-bg: #007bff;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover: #dddddd;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            --bg-color: #2C2F33;
+            --text-color: #E0E0E0;
+            --input-bg: #40444B;
+            --bot-bg: #3B3E42;
+            --user-bg: #4E8EF7;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover: #dddddd;
+        }
+
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #E0E0E0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            border: none;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--button-hover);
+        }
+
+        #agent-selector {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background: var(--input-bg);
+            color: var(--text-color);
         }
 
         #chat-container {
             width: 90%;
             max-width: 400px;
-            background: #1E1E1E;
+            background: var(--input-bg);
             border-radius: 10px;
             padding: 15px;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
         }
@@ -31,7 +83,7 @@
         #messages {
             height: 300px;
             overflow-y: auto;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid var(--bot-bg);
             padding: 10px;
             display: flex;
             flex-direction: column;
@@ -47,20 +99,20 @@
             animation: fadeIn 0.3s ease-in forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .user {
-            background-color: #0D47A1;
+            background-color: var(--user-bg);
             align-self: flex-end;
             color: white;
         }
 
         .bot {
-            background-color: #333;
+            background-color: var(--bot-bg);
             align-self: flex-start;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         #input-area {
@@ -71,29 +123,39 @@
         input {
             flex: 1;
             padding: 10px;
-            background: #252525;
-            color: #E0E0E0;
+            background: var(--input-bg);
+            color: var(--text-color);
             border: none;
             border-radius: 5px;
             outline: none;
         }
 
+        /* Modern White Send Button */
         button {
-            padding: 10px;
-            background: #0D47A1;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            padding: 10px 15px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: 2px solid var(--button-text);
+            border-radius: 8px;
             cursor: pointer;
             margin-left: 5px;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
         }
 
         button:hover {
-            background: #1565C0;
+            background: var(--button-hover);
         }
     </style>
 </head>
 <body>
+    <button id="theme-toggle">Toggle Theme</button>
+    
+    <select id="agent-selector">
+        <option value="agent1">Agent 1</option>
+        <option value="agent2">Agent 2</option>
+    </select>
+
     <div id="chat-container">
         <div id="messages"></div>
         <div id="input-area">
@@ -103,22 +165,31 @@
     </div>
 
     <script>
+        // Theme Toggle
+        document.getElementById("theme-toggle").addEventListener("click", function() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        });
+
+        // Load saved theme preference
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
         async function sendMessage() {
             const inputField = document.getElementById("user-input");
             const userMessage = inputField.value.trim();
             if (!userMessage) return;
 
-            // Display user message
             addMessage(userMessage, "user");
-
-            // Clear input field
             inputField.value = "";
 
-            // Send to backend (Dialogflow API via Firebase Functions)
+            const selectedAgent = document.getElementById("agent-selector").value;
+
             const response = await fetch("YOUR_FIREBASE_FUNCTION_URL/dialogflow", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId: "12345", message: userMessage }),
+                body: JSON.stringify({ sessionId: "12345", message: userMessage, agent: selectedAgent }),
             });
 
             const data = await response.json();
@@ -146,7 +217,7 @@
                 if (i < botReply.length) {
                     messageDiv.textContent += botReply[i];
                     i++;
-                    setTimeout(type, 40); // Typing speed (40ms per letter)
+                    setTimeout(type, 40);
                 }
             }
             type();
