@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        /* Dark Mode Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #chat-container {
+            width: 90%;
+            max-width: 400px;
+            background: #1E1E1E;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border-bottom: 1px solid #333;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user {
+            background-color: #0D47A1;
+            align-self: flex-end;
+            color: white;
+        }
+
+        .bot {
+            background-color: #333;
+            align-self: flex-start;
+        }
+
+        #input-area {
+            display: flex;
+            padding-top: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            background: #252525;
+            color: #E0E0E0;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px;
+            background: #0D47A1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            background: #1565C0;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const userMessage = inputField.value.trim();
+            if (!userMessage) return;
+
+            // Display user message
+            addMessage(userMessage, "user");
+
+            // Clear input field
+            inputField.value = "";
+
+            // Send to backend (Dialogflow API via Firebase Functions)
+            const response = await fetch("YOUR_FIREBASE_FUNCTION_URL/dialogflow", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId: "12345", message: userMessage }),
+            });
+
+            const data = await response.json();
+            showTypingEffect(data.reply);
+        }
+
+        function addMessage(text, sender) {
+            const messageContainer = document.getElementById("messages");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", sender);
+            messageDiv.textContent = text;
+            messageContainer.appendChild(messageDiv);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        function showTypingEffect(botReply) {
+            const messageContainer = document.getElementById("messages");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", "bot");
+            messageContainer.appendChild(messageDiv);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+
+            let i = 0;
+            function type() {
+                if (i < botReply.length) {
+                    messageDiv.textContent += botReply[i];
+                    i++;
+                    setTimeout(type, 40); // Typing speed (40ms per letter)
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
