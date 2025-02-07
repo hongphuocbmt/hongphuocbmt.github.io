@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
     <style>
-        /* Default Light Mode */
+        /* Variables for Light and Dark Mode */
         :root {
             --bg-color: #f8f9fa;
             --text-color: #212529;
-            --input-bg: #ffffff;
+            --menu-bg: #ffffff;
+            --menu-text: #000000;
             --bot-bg: #e9ecef;
             --user-bg: #007bff;
             --button-bg: #ffffff;
@@ -17,16 +18,16 @@
             --button-hover: #dddddd;
         }
 
-        /* Dark Mode */
         .dark-mode {
             --bg-color: #2C2F33;
             --text-color: #E0E0E0;
-            --input-bg: #40444B;
+            --menu-bg: #3B3E42;
+            --menu-text: #E0E0E0;
             --bot-bg: #3B3E42;
             --user-bg: #4E8EF7;
-            --button-bg: #ffffff;
-            --button-text: #000000;
-            --button-hover: #dddddd;
+            --button-bg: #4E8EF7;
+            --button-text: #ffffff;
+            --button-hover: #3A6EC1;
         }
 
         /* General Styles */
@@ -34,45 +35,58 @@
             font-family: Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
+            height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            flex-direction: column;
-            transition: background 0.3s, color 0.3s;
         }
 
-        #theme-toggle {
+        #menu {
             position: absolute;
             top: 10px;
-            right: 10px;
-            padding: 8px 15px;
-            border: none;
-            background-color: var(--button-bg);
+            left: 10px;
+            background: var(--menu-bg);
+            color: var(--menu-text);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        #menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--button-bg);
             color: var(--button-text);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        #theme-toggle:hover {
-            background-color: var(--button-hover);
-        }
-
-        #agent-selector {
-            margin-bottom: 10px;
-            padding: 8px;
-            border-radius: 5px;
             border: none;
-            background: var(--input-bg);
-            color: var(--text-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        #menu-button:hover {
+            background: var(--button-hover);
+        }
+
+        #menu h3 {
+            margin-top: 0;
+        }
+
+        #menu select, #menu button {
+            margin-top: 5px;
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
         }
 
         #chat-container {
             width: 90%;
             max-width: 400px;
-            background: var(--input-bg);
+            background: var(--bg-color);
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -95,24 +109,18 @@
             max-width: 80%;
             word-wrap: break-word;
             margin-bottom: 8px;
-            opacity: 0;
-            animation: fadeIn 0.3s ease-in forwards;
         }
 
         .user {
             background-color: var(--user-bg);
-            align-self: flex-end;
             color: white;
+            align-self: flex-end;
         }
 
         .bot {
             background-color: var(--bot-bg);
+            color: var(--text-color);
             align-self: flex-start;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         #input-area {
@@ -123,24 +131,22 @@
         input {
             flex: 1;
             padding: 10px;
-            background: var(--input-bg);
-            color: var(--text-color);
-            border: none;
+            border: 2px solid var(--bot-bg);
             border-radius: 5px;
+            background: var(--bg-color);
+            color: var(--text-color);
             outline: none;
         }
 
-        /* Modern White Send Button */
         button {
-            padding: 10px 15px;
+            padding: 10px;
+            margin-left: 5px;
             background: var(--button-bg);
             color: var(--button-text);
-            border: 2px solid var(--button-text);
-            border-radius: 8px;
+            border: 2px solid var(--text-color);
+            border-radius: 5px;
             cursor: pointer;
-            margin-left: 5px;
             font-weight: bold;
-            transition: background 0.3s, color 0.3s;
         }
 
         button:hover {
@@ -149,51 +155,67 @@
     </style>
 </head>
 <body>
-    <button id="theme-toggle">Toggle Theme</button>
-    
-    <select id="agent-selector">
-        <option value="agent1">Agent 1</option>
-        <option value="agent2">Agent 2</option>
-    </select>
+    <button id="menu-button">☰ Menu</button>
+    <div id="menu">
+        <h3>Settings</h3>
+        <label for="agent">Select Agent:</label>
+        <select id="agent">
+            <option value="agent1">Agent 1</option>
+            <option value="agent2">Agent 2</option>
+        </select>
+
+        <label for="icons">Icons:</label>
+        <select id="icons">
+            <option value="icon1">Icon 1</option>
+            <option value="icon2">Icon 2</option>
+        </select>
+
+        <label for="topics">Select Topic:</label>
+        <select id="topics">
+            <option value="topic1">Topic 1</option>
+            <option value="topic2">Topic 2</option>
+            <option value="topic3">Topic 3</option>
+            <option value="topic4">Topic 4</option>
+        </select>
+
+        <button id="refresh">Refresh Chat</button>
+    </div>
 
     <div id="chat-container">
         <div id="messages"></div>
         <div id="input-area">
             <input type="text" id="user-input" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
+            <button id="send-button">Send</button>
         </div>
     </div>
 
     <script>
-        // Theme Toggle
-        document.getElementById("theme-toggle").addEventListener("click", function() {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        // Menu toggle
+        const menuButton = document.getElementById("menu-button");
+        const menu = document.getElementById("menu");
+
+        menuButton.addEventListener("click", () => {
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
         });
 
-        // Load saved theme preference
-        if (localStorage.getItem("theme") === "dark") {
-            document.body.classList.add("dark-mode");
-        }
+        // Send message using the Enter key or Send button
+        const inputField = document.getElementById("user-input");
+        const sendButton = document.getElementById("send-button");
 
-        async function sendMessage() {
-            const inputField = document.getElementById("user-input");
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        sendButton.addEventListener("click", sendMessage);
+
+        function sendMessage() {
             const userMessage = inputField.value.trim();
             if (!userMessage) return;
 
             addMessage(userMessage, "user");
-            inputField.value = "";
-
-            const selectedAgent = document.getElementById("agent-selector").value;
-
-            const response = await fetch("YOUR_FIREBASE_FUNCTION_URL/dialogflow", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId: "12345", message: userMessage, agent: selectedAgent }),
-            });
-
-            const data = await response.json();
-            showTypingEffect(data.reply);
+            inputField.value = ""; // Clear input field
         }
 
         function addMessage(text, sender) {
@@ -205,23 +227,10 @@
             messageContainer.scrollTop = messageContainer.scrollHeight;
         }
 
-        function showTypingEffect(botReply) {
-            const messageContainer = document.getElementById("messages");
-            const messageDiv = document.createElement("div");
-            messageDiv.classList.add("message", "bot");
-            messageContainer.appendChild(messageDiv);
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-
-            let i = 0;
-            function type() {
-                if (i < botReply.length) {
-                    messageDiv.textContent += botReply[i];
-                    i++;
-                    setTimeout(type, 40);
-                }
-            }
-            type();
-        }
+        // Refresh chat
+        document.getElementById("refresh").addEventListener("click", () => {
+            document.getElementById("messages").innerHTML = "";
+        });
     </script>
 </body>
 </html>
