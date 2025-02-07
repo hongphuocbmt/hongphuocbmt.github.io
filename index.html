@@ -49,10 +49,14 @@
             background: var(--menu-bg);
             color: var(--menu-text);
             border-radius: 8px;
-            padding: 10px;
+            padding: 15px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             display: none;
             z-index: 1000;
+        }
+
+        #menu h3 {
+            margin-top: 0;
         }
 
         #menu-button {
@@ -71,16 +75,29 @@
             background: var(--button-hover);
         }
 
-        #menu h3 {
-            margin-top: 0;
+        #close-menu {
+            margin-top: 10px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            width: 100%;
         }
 
-        #menu select, #menu button {
-            margin-top: 5px;
+        #close-menu:hover {
+            background: var(--button-hover);
+        }
+
+        #menu select, #menu button, #menu label {
+            margin-top: 10px;
             width: 100%;
             padding: 8px;
             border: none;
             border-radius: 5px;
+            background: var(--bg-color);
+            color: var(--text-color);
         }
 
         #chat-container {
@@ -156,6 +173,7 @@
 </head>
 <body>
     <button id="menu-button">☰ Menu</button>
+
     <div id="menu">
         <h3>Settings</h3>
         <label for="agent">Select Agent:</label>
@@ -179,6 +197,13 @@
         </select>
 
         <button id="refresh">Refresh Chat</button>
+
+        <label>
+            <input type="checkbox" id="theme-toggle">
+            Toggle Day/Night Mode
+        </label>
+
+        <button id="close-menu">Close Menu</button>
     </div>
 
     <div id="chat-container">
@@ -193,10 +218,28 @@
         // Menu toggle
         const menuButton = document.getElementById("menu-button");
         const menu = document.getElementById("menu");
+        const closeMenuButton = document.getElementById("close-menu");
 
         menuButton.addEventListener("click", () => {
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
+            menu.style.display = "block";
         });
+
+        closeMenuButton.addEventListener("click", () => {
+            menu.style.display = "none";
+        });
+
+        // Day/Night mode toggle
+        const themeToggle = document.getElementById("theme-toggle");
+        themeToggle.addEventListener("change", () => {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        });
+
+        // Load saved theme preference
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+            themeToggle.checked = true;
+        }
 
         // Send message using the Enter key or Send button
         const inputField = document.getElementById("user-input");
