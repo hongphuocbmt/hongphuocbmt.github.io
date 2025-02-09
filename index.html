@@ -140,6 +140,20 @@
             align-self: flex-start;
         }
 
+        #suggestion {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px dashed var(--text-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        #suggestion:hover {
+            background: var(--button-hover);
+        }
+
         #input-area {
             display: flex;
             padding-top: 10px;
@@ -176,38 +190,20 @@
 
     <div id="menu">
         <h3>Settings</h3>
-        <label for="agent">Select Agent:</label>
-        <select id="agent">
-            <option value="agent1">Agent 1</option>
-            <option value="agent2">Agent 2</option>
-        </select>
-
-        <label for="icons">Icons:</label>
-        <select id="icons">
-            <option value="icon1">Icon 1</option>
-            <option value="icon2">Icon 2</option>
-        </select>
-
         <label for="topics">Select Topic:</label>
         <select id="topics">
-            <option value="topic1">Topic 1</option>
-            <option value="topic2">Topic 2</option>
-            <option value="topic3">Topic 3</option>
-            <option value="topic4">Topic 4</option>
+            <option value="topic1">Heart Attack</option>
+            <option value="topic2">Hepatitis C</option>
+            <option value="topic3">Cancer</option>
+            <option value="topic4">Hypothyroidism</option>
         </select>
-
         <button id="refresh">Refresh Chat</button>
-
-        <label>
-            <input type="checkbox" id="theme-toggle">
-            Toggle Day/Night Mode
-        </label>
-
         <button id="close-menu">Close Menu</button>
     </div>
 
     <div id="chat-container">
         <div id="messages"></div>
+        <div id="suggestion" style="display: none;">Click for a suggested question</div>
         <div id="input-area">
             <input type="text" id="user-input" placeholder="Type a message...">
             <button id="send-button">Send</button>
@@ -215,51 +211,63 @@
     </div>
 
     <script>
-        // Menu toggle
-        const menuButton = document.getElementById("menu-button");
-        const menu = document.getElementById("menu");
-        const closeMenuButton = document.getElementById("close-menu");
+        const questions = {
+            topic1: [
+                "What Is a Heart Attack?",
+                "What are the symptoms of a heart attack?",
+                "What is the most common cause of a heart attack?",
+                "What are the risk factors for heart attacks?",
+                "What are some ways to prevent heart attacks?"
+            ],
+            topic2: [
+                "What is Hepatitis C?",
+                "How is Hepatitis C Spread?",
+                "What Are the Symptoms of Hepatitis C?",
+                "What Other Problems Can Hepatitis C Cause?",
+                "What Are the Treatments for Hepatitis C?"
+            ],
+            topic3: [
+                "What kinds of cancer are more common in young adults?",
+                "Are there ways to prevent breast cancer?",
+                "How do I know if something on my skin might be melanoma?",
+                "How do doctors treat cancer?",
+                "What’s the difference between chemotherapy and radiotherapy?"
+            ],
+            topic4: [
+                "What is Hypothyroidism?",
+                "What causes hypothyroidism?",
+                "What are the symptoms of hypothyroidism?",
+                "What other problems can hypothyroidism cause?",
+                "What are the treatments for hypothyroidism?"
+            ]
+        };
 
-        menuButton.addEventListener("click", () => {
-            menu.style.display = "block";
-        });
+        let usedQuestions = [];
 
-        closeMenuButton.addEventListener("click", () => {
-            menu.style.display = "none";
-        });
-
-        // Day/Night mode toggle
-        const themeToggle = document.getElementById("theme-toggle");
-        themeToggle.addEventListener("change", () => {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
-        });
-
-        // Load saved theme preference
-        if (localStorage.getItem("theme") === "dark") {
-            document.body.classList.add("dark-mode");
-            themeToggle.checked = true;
+        function suggestQuestion(topic) {
+            if (!questions[topic] || questions[topic].length === usedQuestions.length) return;
+            let availableQuestions = questions[topic].filter(q => !usedQuestions.includes(q));
+            let randomIndex = Math.floor(Math.random() * availableQuestions.length);
+            let randomQuestion = availableQuestions[randomIndex];
+            usedQuestions.push(randomQuestion);
+            return randomQuestion;
         }
 
-        // Send message using the Enter key or Send button
-        const inputField = document.getElementById("user-input");
-        const sendButton = document.getElementById("send-button");
-
-        inputField.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                sendMessage();
+        document.getElementById("topics").addEventListener("change", function () {
+            const topic = this.value;
+            const suggestionDiv = document.getElementById("suggestion");
+            const suggestedQuestion = suggestQuestion(topic);
+            if (suggestedQuestion) {
+                suggestionDiv.textContent = suggestedQuestion;
+                suggestionDiv.style.display = "block";
+                suggestionDiv.onclick = () => {
+                    addMessage(suggestedQuestion, "user");
+                    suggestionDiv.style.display = "none";
+                };
+            } else {
+                suggestionDiv.style.display = "none";
             }
         });
-
-        sendButton.addEventListener("click", sendMessage);
-
-        function sendMessage() {
-            const userMessage = inputField.value.trim();
-            if (!userMessage) return;
-
-            addMessage(userMessage, "user");
-            inputField.value = ""; // Clear input field
-        }
 
         function addMessage(text, sender) {
             const messageContainer = document.getElementById("messages");
@@ -270,9 +278,9 @@
             messageContainer.scrollTop = messageContainer.scrollHeight;
         }
 
-        // Refresh chat
         document.getElementById("refresh").addEventListener("click", () => {
             document.getElementById("messages").innerHTML = "";
+            usedQuestions = [];
         });
     </script>
 </body>
