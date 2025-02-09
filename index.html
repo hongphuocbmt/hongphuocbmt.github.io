@@ -40,6 +40,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
 
         #menu {
@@ -55,10 +56,6 @@
             z-index: 1000;
         }
 
-        #menu h3 {
-            margin-top: 0;
-        }
-
         #menu-button {
             position: absolute;
             top: 10px;
@@ -72,21 +69,6 @@
         }
 
         #menu-button:hover {
-            background: var(--button-hover);
-        }
-
-        #close-menu {
-            margin-top: 10px;
-            background: var(--button-bg);
-            color: var(--button-text);
-            border: none;
-            border-radius: 8px;
-            padding: 8px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        #close-menu:hover {
             background: var(--button-hover);
         }
 
@@ -142,7 +124,28 @@
 
         #input-area {
             display: flex;
-            padding-top: 10px;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .suggestion {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: 1px solid var(--text-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .suggestion:hover {
+            background: var(--button-hover);
         }
 
         input {
@@ -180,85 +183,76 @@
         <select id="agent">
             <option value="agent1">Agent 1</option>
             <option value="agent2">Agent 2</option>
-        </select>
-
-        <label for="icons">Icons:</label>
-        <select id="icons">
-            <option value="icon1">Icon 1</option>
-            <option value="icon2">Icon 2</option>
+            <option value="agent3">Agent 3</option>
+            <option value="agent4">Agent 4</option>
         </select>
 
         <label for="topics">Select Topic:</label>
         <select id="topics">
-            <option value="topic1">Topic 1</option>
-            <option value="topic2">Topic 2</option>
-            <option value="topic3">Topic 3</option>
-            <option value="topic4">Topic 4</option>
+            <option value="topic1">Technology</option>
+            <option value="topic2">Health</option>
+            <option value="topic3">Education</option>
+            <option value="topic4">Entertainment</option>
         </select>
 
         <button id="refresh">Refresh Chat</button>
-
-        <label>
-            <input type="checkbox" id="theme-toggle">
-            Toggle Day/Night Mode
-        </label>
-
-        <button id="close-menu">Close Menu</button>
     </div>
 
     <div id="chat-container">
         <div id="messages"></div>
         <div id="input-area">
+            <div id="suggestions"></div>
             <input type="text" id="user-input" placeholder="Type a message...">
             <button id="send-button">Send</button>
         </div>
     </div>
 
     <script>
-        // Menu toggle
-        const menuButton = document.getElementById("menu-button");
-        const menu = document.getElementById("menu");
-        const closeMenuButton = document.getElementById("close-menu");
+        const topicSuggestions = {
+            topic1: ["What is AI?", "Explain cloud computing", "Latest tech trends?"],
+            topic2: ["How to stay healthy?", "What are balanced diets?", "Benefits of exercise?"],
+            topic3: ["Tips for studying?", "Best online courses?", "Learning new languages?"],
+            topic4: ["What’s trending in movies?", "Best TV shows?", "Upcoming games?"],
+        };
 
-        menuButton.addEventListener("click", () => {
-            menu.style.display = "block";
+        const topicsDropdown = document.getElementById("topics");
+        const suggestionsDiv = document.getElementById("suggestions");
+        const userInput = document.getElementById("user-input");
+
+        // Show suggestions based on the selected topic
+        topicsDropdown.addEventListener("change", () => {
+            const selectedTopic = topicsDropdown.value;
+            const questions = topicSuggestions[selectedTopic] || [];
+            suggestionsDiv.innerHTML = ""; // Clear existing suggestions
+
+            questions.forEach((question) => {
+                const suggestion = document.createElement("div");
+                suggestion.className = "suggestion";
+                suggestion.textContent = question;
+                suggestion.addEventListener("click", () => {
+                    userInput.value = question; // Fill the input with the suggestion
+                });
+                suggestionsDiv.appendChild(suggestion);
+            });
         });
 
-        closeMenuButton.addEventListener("click", () => {
-            menu.style.display = "none";
+        // Refresh Chat
+        document.getElementById("refresh").addEventListener("click", () => {
+            document.getElementById("messages").innerHTML = "";
         });
 
-        // Day/Night mode toggle
-        const themeToggle = document.getElementById("theme-toggle");
-        themeToggle.addEventListener("change", () => {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        // Send message logic
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+        userInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") sendMessage();
         });
-
-        // Load saved theme preference
-        if (localStorage.getItem("theme") === "dark") {
-            document.body.classList.add("dark-mode");
-            themeToggle.checked = true;
-        }
-
-        // Send message using the Enter key or Send button
-        const inputField = document.getElementById("user-input");
-        const sendButton = document.getElementById("send-button");
-
-        inputField.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
-        });
-
-        sendButton.addEventListener("click", sendMessage);
 
         function sendMessage() {
-            const userMessage = inputField.value.trim();
-            if (!userMessage) return;
+            const message = userInput.value.trim();
+            if (!message) return;
 
-            addMessage(userMessage, "user");
-            inputField.value = ""; // Clear input field
+            addMessage(message, "user");
+            userInput.value = ""; // Clear input field
         }
 
         function addMessage(text, sender) {
@@ -269,11 +263,6 @@
             messageContainer.appendChild(messageDiv);
             messageContainer.scrollTop = messageContainer.scrollHeight;
         }
-
-        // Refresh chat
-        document.getElementById("refresh").addEventListener("click", () => {
-            document.getElementById("messages").innerHTML = "";
-        });
     </script>
 </body>
 </html>
