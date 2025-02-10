@@ -281,7 +281,20 @@
             if (!message) return;
 
             addMessage(message, "user");
+
+            const selectedTopic = topicsDropdown.value;
+            const suggestions = availableSuggestions[selectedTopic];
+
+            // Remove the suggestion from the array if it matches the sent message
+            if (suggestions) {
+                const index = suggestions.indexOf(message);
+                if (index > -1) {
+                    suggestions.splice(index, 1);
+                }
+            }
+
             userInput.value = ""; // Clear input field
+            displayRandomSuggestion(selectedTopic); // Display next random suggestion
         }
 
         function addMessage(text, sender) {
