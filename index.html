@@ -190,11 +190,16 @@
 
         <label for="topics">Select Topic:</label>
         <select id="topics">
-            <option value="topic1">Technology</option>
-            <option value="topic2">Health</option>
-            <option value="topic3">Education</option>
-            <option value="topic4">Entertainment</option>
+            <option value="topic1">Heart Attack</option>
+            <option value="topic2">Hepatitis C</option>
+            <option value="topic3">Cancer</option>
+            <option value="topic4">Hypothyroidism</option>
         </select>
+
+        <label>
+            <input type="checkbox" id="theme-toggle">
+            Toggle Day/Night Mode
+        </label>
 
         <button id="refresh">Refresh Chat</button>
     </div>
@@ -210,15 +215,16 @@
 
     <script>
         const topicSuggestions = {
-            topic1: ["What is AI?", "Explain cloud computing", "Latest tech trends?"],
-            topic2: ["How to stay healthy?", "What are balanced diets?", "Benefits of exercise?"],
-            topic3: ["Tips for studying?", "Best online courses?", "Learning new languages?"],
-            topic4: ["What’s trending in movies?", "Best TV shows?", "Upcoming games?"],
+            topic1: ["What Is a Heart Attack?", "What are the symptoms of a heart attack?", "What is the most common cause of a heart attack?", "What are the risk factors for heart attacks?","What are some ways to prevent heart attacks?"],
+            topic2: ["What is Hepatitis C?", "How is Hepatitis C Spread?", "What Are the Symptoms of Hepatitis C?","What Other Problems Can Hepatitis C Cause?","What Are the Treatments for Hepatitis C?"],
+            topic3: ["What kinds of cancer are more common in young adults?", "Are there ways to prevent breast cancer?", "How do I know if something on my skin might be melanoma?","How do doctors treat cancer?","What’s the difference between chemotherapy and radiotherapy?"],
+            topic4: ["What is Hypothyroidism?", "What causes hypothyroidism?", "What are the symptoms of hypothyroidism?", "What other problems can hypothyroidism cause?","What are the treatments for hypothyroidism?"],
         };
 
         const topicsDropdown = document.getElementById("topics");
         const suggestionsDiv = document.getElementById("suggestions");
         const userInput = document.getElementById("user-input");
+        const themeToggle = document.getElementById("theme-toggle");
 
         // Show suggestions based on the selected topic
         topicsDropdown.addEventListener("change", () => {
@@ -271,6 +277,18 @@
         menuButton.addEventListener("click", () => {
             menu.style.display = menu.style.display === "block" ? "none" : "block";
         });
+
+        // Toggle Day/Night mode
+        themeToggle.addEventListener("change", () => {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        });
+
+        // Load saved theme preference
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+            themeToggle.checked = true;
+        }
     </script>
 </body>
 </html>
