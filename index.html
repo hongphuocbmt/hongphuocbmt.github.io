@@ -242,8 +242,14 @@
                 return;
             }
 
-            const randomIndex = Math.floor(Math.random() * suggestions.length);
-            const suggestionText = suggestions[randomIndex];
+            let randomIndex;
+            let suggestionText;
+
+            // Ensure the suggested question is not the same as the one in the text box
+            do {
+                randomIndex = Math.floor(Math.random() * suggestions.length);
+                suggestionText = suggestions[randomIndex];
+            } while (suggestionText === userInput.value && suggestions.length > 1);
 
             suggestionsDiv.innerHTML = ""; // Clear existing suggestion
             const suggestion = document.createElement("div");
@@ -251,8 +257,6 @@
             suggestion.textContent = suggestionText;
             suggestion.addEventListener("click", () => {
                 userInput.value = suggestionText; // Fill input box
-                //availableSuggestions[topic].splice(randomIndex, 1); // Remove the selected suggestion
-                displayRandomSuggestion(topic); // Show the next random suggestion
             });
             suggestionsDiv.appendChild(suggestion);
         }
@@ -285,7 +289,7 @@
             const selectedTopic = topicsDropdown.value;
             const suggestions = availableSuggestions[selectedTopic];
 
-            // Remove the suggestion from the array if it matches the sent message
+            // Remove only the exact sent message from the array
             if (suggestions) {
                 const index = suggestions.indexOf(message);
                 if (index > -1) {
