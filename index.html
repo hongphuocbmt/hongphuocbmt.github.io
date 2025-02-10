@@ -242,14 +242,15 @@
                 return;
             }
 
-            let randomIndex;
-            let suggestionText;
+            let filteredSuggestions = suggestions.filter(q => q !== userInput.value); // Remove the one in the text box
 
-            // Ensure the suggested question is not the same as the one in the text box
-            do {
-                randomIndex = Math.floor(Math.random() * suggestions.length);
-                suggestionText = suggestions[randomIndex];
-            } while (suggestionText === userInput.value && suggestions.length > 1);
+            // If all available suggestions match the input, return any remaining one
+            if (filteredSuggestions.length === 0) {
+                filteredSuggestions = suggestions;
+            }
+
+            const randomIndex = Math.floor(Math.random() * filteredSuggestions.length);
+            const suggestionText = filteredSuggestions[randomIndex];
 
             suggestionsDiv.innerHTML = ""; // Clear existing suggestion
             const suggestion = document.createElement("div");
@@ -257,9 +258,11 @@
             suggestion.textContent = suggestionText;
             suggestion.addEventListener("click", () => {
                 userInput.value = suggestionText; // Fill input box
+                displayRandomSuggestion(topic); // Generate a new suggestion
             });
             suggestionsDiv.appendChild(suggestion);
         }
+
 
         // Handle topic selection
         topicsDropdown.addEventListener("change", () => {
