@@ -251,7 +251,7 @@
             suggestion.textContent = suggestionText;
             suggestion.addEventListener("click", () => {
                 userInput.value = suggestionText; // Fill input box
-                availableSuggestions[topic].splice(randomIndex, 1); // Remove the selected suggestion
+                //availableSuggestions[topic].splice(randomIndex, 1); // Remove the selected suggestion
                 displayRandomSuggestion(topic); // Show the next random suggestion
             });
             suggestionsDiv.appendChild(suggestion);
