@@ -221,15 +221,33 @@
             topic4: ["What is Hypothyroidism?", "What causes hypothyroidism?", "What are the symptoms of hypothyroidism?", "What other problems can hypothyroidism cause?","What are the treatments for hypothyroidism?"],
         };
 
+        const availableSuggestions = {};
         const topicsDropdown = document.getElementById("topics");
         const suggestionsDiv = document.getElementById("suggestions");
         const userInput = document.getElementById("user-input");
         const themeToggle = document.getElementById("theme-toggle");
 
+        // Initialize available suggestions
+        function resetSuggestions() {
+            for (let topic in topicSuggestions) {
+                availableSuggestions[topic] = [...topicSuggestions[topic]];
+            }
+        }
+        resetSuggestions();
+
+        // Shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         // Show suggestions based on the selected topic
         topicsDropdown.addEventListener("change", () => {
             const selectedTopic = topicsDropdown.value;
-            const questions = topicSuggestions[selectedTopic] || [];
+            const questions = availableSuggestions[selectedTopic] || [];
+            shuffleArray(questions); // Randomize questions
             suggestionsDiv.innerHTML = ""; // Clear existing suggestions
 
             questions.forEach((question) => {
@@ -238,14 +256,20 @@
                 suggestion.textContent = question;
                 suggestion.addEventListener("click", () => {
                     userInput.value = question; // Fill the input with the suggestion
+                    availableSuggestions[selectedTopic] = availableSuggestions[selectedTopic].filter(
+                        (q) => q !== question
+                    ); // Remove the used question
+                    topicsDropdown.dispatchEvent(new Event("change")); // Refresh suggestions
                 });
                 suggestionsDiv.appendChild(suggestion);
             });
         });
 
-        // Refresh Chat
+        // Refresh Chat and Reset Suggestions
         document.getElementById("refresh").addEventListener("click", () => {
             document.getElementById("messages").innerHTML = "";
+            resetSuggestions(); // Reset available suggestions
+            suggestionsDiv.innerHTML = ""; // Clear suggestions
         });
 
         // Send message logic
