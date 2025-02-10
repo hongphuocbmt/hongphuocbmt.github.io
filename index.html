@@ -225,7 +225,6 @@
         const topicsDropdown = document.getElementById("topics");
         const suggestionsDiv = document.getElementById("suggestions");
         const userInput = document.getElementById("user-input");
-        const themeToggle = document.getElementById("theme-toggle");
 
         // Initialize available suggestions
         function resetSuggestions() {
@@ -235,40 +234,39 @@
         }
         resetSuggestions();
 
-        // Shuffle an array
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        // Display one random suggestion at a time
+        function displayRandomSuggestion(topic) {
+            const suggestions = availableSuggestions[topic];
+            if (!suggestions || suggestions.length === 0) {
+                suggestionsDiv.innerHTML = ""; // Clear if no suggestions are left
+                return;
             }
+
+            const randomIndex = Math.floor(Math.random() * suggestions.length);
+            const suggestionText = suggestions[randomIndex];
+
+            suggestionsDiv.innerHTML = ""; // Clear existing suggestion
+            const suggestion = document.createElement("div");
+            suggestion.className = "suggestion";
+            suggestion.textContent = suggestionText;
+            suggestion.addEventListener("click", () => {
+                userInput.value = suggestionText; // Fill input box
+                availableSuggestions[topic].splice(randomIndex, 1); // Remove the selected suggestion
+                displayRandomSuggestion(topic); // Show the next random suggestion
+            });
+            suggestionsDiv.appendChild(suggestion);
         }
 
-        // Show suggestions based on the selected topic
+        // Handle topic selection
         topicsDropdown.addEventListener("change", () => {
             const selectedTopic = topicsDropdown.value;
-            const questions = availableSuggestions[selectedTopic] || [];
-            shuffleArray(questions); // Randomize questions
-            suggestionsDiv.innerHTML = ""; // Clear existing suggestions
-
-            questions.forEach((question) => {
-                const suggestion = document.createElement("div");
-                suggestion.className = "suggestion";
-                suggestion.textContent = question;
-                suggestion.addEventListener("click", () => {
-                    userInput.value = question; // Fill the input with the suggestion
-                    availableSuggestions[selectedTopic] = availableSuggestions[selectedTopic].filter(
-                        (q) => q !== question
-                    ); // Remove the used question
-                    topicsDropdown.dispatchEvent(new Event("change")); // Refresh suggestions
-                });
-                suggestionsDiv.appendChild(suggestion);
-            });
+            displayRandomSuggestion(selectedTopic);
         });
 
         // Refresh Chat and Reset Suggestions
         document.getElementById("refresh").addEventListener("click", () => {
             document.getElementById("messages").innerHTML = "";
-            resetSuggestions(); // Reset available suggestions
+            resetSuggestions(); // Reset all suggestions
             suggestionsDiv.innerHTML = ""; // Clear suggestions
         });
 
@@ -303,6 +301,7 @@
         });
 
         // Toggle Day/Night mode
+        const themeToggle = document.getElementById("theme-toggle");
         themeToggle.addEventListener("change", () => {
             document.body.classList.toggle("dark-mode");
             localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
