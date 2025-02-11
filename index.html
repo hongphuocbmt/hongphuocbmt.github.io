@@ -84,14 +84,14 @@
 
         #chat-container {
             width: 90%;
-            max-width: 1000px;
+            max-width: 1200px;
             background: var(--bg-color);
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            height: 85vh;
+            height: 95vh;
         }
 
         /* #messages {
@@ -134,12 +134,12 @@
 
         #messages {
             flex-grow: 1;
-            overflow-y: auto;
+            overflow-y: hidden;
             border-bottom: 1px solid var(--bot-bg);
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 20px; /* This ensures messages never touch vertically */
+            gap: 12px; /* This ensures messages never touch vertically */
         }
 
         /* Ensure each message has its own row */
@@ -167,6 +167,7 @@
             max-width: 70%;
             word-wrap: break-word;
             display: inline-block;
+            font-size: 15px; /* Reduce font size slightly to fit more */
         }
 
         /* User message styles */
