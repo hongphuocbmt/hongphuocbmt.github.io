@@ -279,15 +279,47 @@
 
         // Send message logic
         document.getElementById("send-button").addEventListener("click", sendMessage);
-        userInput.addEventListener("keypress", (e) => {
+        document.getElementById("user-input").addEventListener("keypress", (e) => {
             if (e.key === "Enter") sendMessage();
         });
 
-        function sendMessage() {
-            const message = userInput.value.trim();
+        // Replace with your actual Google Cloud Function URL
+        const CLOUD_FUNCTION_URL = "https://us-central1-casual-ypeq.cloudfunctions.net/dialogflowHandler";
+
+        // Send message to Cloud Function and display response
+        async function sendMessage() {
+            const message = document.getElementById("user-input").value.trim();
             if (!message) return;
 
-            addMessage(message, "user");
+            addMessage(message, "user"); // Show user message
+            document.getElementById("user-input").value = ""; // Clear input field
+
+            try {
+                const response = await fetch(CLOUD_FUNCTION_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        sessionId: "test-session", // Unique session per user
+                        message: message
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Server response was not OK");
+                }
+
+                const data = await response.json();
+                if (data.reply) {
+                    addMessage(data.reply, "bot"); // Display bot response
+                } else {
+                    addMessage("⚠️ Error: No response from bot.", "bot");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                addMessage("⚠️ Error: Unable to connect to the server.", "bot");
+            }
 
             const selectedTopic = topicsDropdown.value;
             const suggestions = availableSuggestions[selectedTopic];
