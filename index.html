@@ -340,7 +340,7 @@
             const messageContainer = document.getElementById("messages");
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
-            messageDiv.textContent = text;
+            messageDiv.textContent = "";
             messageContainer.appendChild(messageDiv);
             messageContainer.scrollTop = messageContainer.scrollHeight;
 
@@ -350,12 +350,12 @@
                     if (index < text.length) {
                         messageDiv.textContent += text.charAt(index);
                         index++;
-                        setTimeout(typeEffect, 50); // Adjust speed (lower is faster)
+                        setTimeout(typeEffect, 20); // Adjust speed (lower is faster)
                     }
                 }
-                typeEffect();
+                setTimeout(typeEffect, 30); // Start typing effect immediately
             } else {
-                messageDiv.textContent = text;
+                messageDiv.textContent = text; // Instant display for user messages
             }
 
             messageContainer.scrollTop = messageContainer.scrollHeight;
