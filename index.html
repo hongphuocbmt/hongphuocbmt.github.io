@@ -84,14 +84,14 @@
 
         #chat-container {
             width: 90%;
-            max-width: 1200px;
+            max-width: 1300px;
             background: var(--bg-color);
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            height: 95vh;
+            height: 80vh;
         }
 
         /* #messages {
@@ -420,13 +420,21 @@
                         messageDiv.textContent += text.charAt(index);
                         index++;
                         setTimeout(typeEffect, 20); // Adjust speed (lower is faster)
+                        scrollToBottom(); // Ensure scrolling happens smoothly
                     }
                 }
                 setTimeout(typeEffect, 30); // Start typing effect immediately
             } else {
                 messageDiv.textContent = text; // Instant display for user messages
+                scrollToBottom(); // Ensure scrolling happens smoothly
             }
 
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        // Function to auto-scroll the chat to the latest message
+        function scrollToBottom() {
+            const messageContainer = document.getElementById("messages");
             messageContainer.scrollTop = messageContainer.scrollHeight;
         }
 
