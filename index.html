@@ -94,6 +94,44 @@
             height: 85vh;
         }
 
+        /* #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            border-bottom: 1px solid var(--bot-bg);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; // Added spacing between messages
+        }
+
+        //Chat Bubbles
+        .message {
+            padding: 12px 16px;
+            border-radius: 16px;
+            max-width: 75%;
+            word-wrap: break-word;
+            display: inline-block;
+            position: relative; //Ensures proper spacing
+        }
+
+        //User message on the right
+        .user {
+            background-color: var(--user-bg);
+            color: white;
+            align-self: flex-end;
+            border-top-right-radius: 2px; //Slight styling variation
+            margin-left: auto;
+        }
+
+        //Bot message on the left
+        .bot {
+            background-color: var(--bot-bg);
+            color: var(--text-color);
+            align-self: flex-start;
+            border-top-left-radius: 2px; //Slight styling variation
+            margin-right: auto;
+        } */
+
         #messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -101,35 +139,47 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 20px; /* Added spacing between messages */
+            }
+
+        /* Ensure each message has its own row */
+        .message-container {
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px; /* Space between bubbles */
         }
 
-        /* Chat Bubbles */
+        /* User message aligned to the right */
+        .message-container.user {
+        justify-content: flex-end;
+        }
+
+        /* Bot message aligned to the left */
+        .message-container.bot {
+        justify-content: flex-start;
+        }
+
+        /* Chat Message Bubbles */
         .message {
-            padding: 12px 16px;
-            border-radius: 16px;
-            max-width: 75%;
-            word-wrap: break-word;
-            display: inline-block;
-            position: relative; /* Ensures proper spacing */
+        padding: 12px 16px;
+        border-radius: 16px;
+        max-width: 75%;
+        word-wrap: break-word;
+        display: inline-block;
+        position: relative;
         }
 
-        /* User message on the right */
-        .user {
-            background-color: var(--user-bg);
-            color: white;
-            align-self: flex-end;
-            border-top-right-radius: 2px; /* Slight styling variation */
-            margin-left: auto;
+        /* User message styles */
+        .user .message {
+        background-color: var(--user-bg);
+        color: white;
+        border-top-right-radius: 2px;
         }
 
-        /* Bot message on the left */
-        .bot {
-            background-color: var(--bot-bg);
-            color: var(--text-color);
-            align-self: flex-start;
-            border-top-left-radius: 2px; /* Slight styling variation */
-            margin-right: auto;
+        /* Bot message styles */
+        .bot .message {
+        background-color: var(--bot-bg);
+        color: var(--text-color);
+        border-top-left-radius: 2px;
         }
 
         #input-area {
@@ -347,10 +397,14 @@
 
         function addMessage(text, sender) {
             const messageContainer = document.getElementById("messages");
+            const containerDiv = document.createElement("div"); // New wrapper for messages
+            containerDiv.classList.add("message-container", sender);
+
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
-            messageDiv.textContent = "";
-            messageContainer.appendChild(messageDiv);
+            messageDiv.textContent = ""; // Ensure it's empty at the start
+            containerDiv.appendChild(messageDiv);
+            messageContainer.appendChild(containerDiv);
             messageContainer.scrollTop = messageContainer.scrollHeight;
 
             if (sender === "bot") {
