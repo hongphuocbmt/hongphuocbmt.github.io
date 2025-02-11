@@ -343,6 +343,22 @@
             messageDiv.textContent = text;
             messageContainer.appendChild(messageDiv);
             messageContainer.scrollTop = messageContainer.scrollHeight;
+
+            if (sender === "bot") {
+                let index = 0;
+                function typeEffect() {
+                    if (index < text.length) {
+                        messageDiv.textContent += text.charAt(index);
+                        index++;
+                        setTimeout(typeEffect, 50); // Adjust speed (lower is faster)
+                    }
+                }
+                typeEffect();
+            } else {
+                messageDiv.textContent = text;
+            }
+
+            messageContainer.scrollTop = messageContainer.scrollHeight;
         }
 
         // Toggle menu visibility
