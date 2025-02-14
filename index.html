@@ -336,13 +336,32 @@
                 suggestionsDiv.innerHTML = ""; // Clear if no suggestions
                 return;
             }
+
+            // Get the next suggestion in order
+            let index = availableSuggestions[topic] % suggestions.length;
+            const suggestionText = suggestions[index];
+
+            // Increment index for next time
+            availableSuggestions[topic]++;
+
+            // Display the suggestion
+            suggestionsDiv.innerHTML = ""; // Clear existing suggestion
+            const suggestion = document.createElement("div");
+            suggestion.className = "suggestion";
+            suggestion.textContent = suggestionText;
+            suggestion.addEventListener("click", () => {
+                userInput.value = suggestionText; // Fill input box
+                displayNextSuggestion(topic); // Show the next one in sequence
+            });
+            suggestionsDiv.appendChild(suggestion);
         }
 
 
         // Handle topic selection
         topicsDropdown.addEventListener("change", () => {
             const selectedTopic = topicsDropdown.value;
-            displayRandomSuggestion(selectedTopic);
+            // displayRandomSuggestion(selectedTopic);
+            displayNextSuggestion(selectedTopic);
         });
 
         // Refresh Chat and Reset Suggestions
@@ -408,7 +427,8 @@
             }
 
             userInput.value = ""; // Clear input field
-            displayRandomSuggestion(selectedTopic); // Display next random suggestion
+            // displayRandomSuggestion(selectedTopic); // Display next random suggestion
+            displayNextSuggestion(selectedTopic); // Display next suggestion in sequence
         }
 
         function addMessage(text, sender) {
