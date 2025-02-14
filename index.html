@@ -191,8 +191,38 @@
 
         #input-area {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Input field */
+        #user-input {
+            flex: 1; /* Makes input take remaining space */
+            padding: 10px;
+            border: 2px solid var(--bot-bg);
+            border-radius: 5px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        /* Send button (smaller and next to input) */
+        #send-button {
+            width: 40px; /* Smaller button */
+            height: 40px;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 50%; /* Makes it round */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Paper airplane icon */
+        #send-button img {
+            width: 20px; /* Icon size */
+            height: 20px;
         }
 
         #suggestions {
@@ -278,7 +308,9 @@
         <div id="input-area">
             <div id="suggestions"></div>
             <input type="text" id="user-input" placeholder="Type a message...">
-            <button id="send-button">Send</button>
+            <button id="send-button">
+                <img src="https://cdn3.iconfinder.com/data/icons/infinity-ink-office/48/005_090_paper_plane_send_message-1024.png" alt="Send">
+            </button>
         </div>
     </div>
 
