@@ -94,43 +94,13 @@
             height: 80vh;
         }
 
-        /* #messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            border-bottom: 1px solid var(--bot-bg);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px; // Added spacing between messages
+        /* Chatbot Name Styling */
+        #chatbot-name {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-
-        //Chat Bubbles
-        .message {
-            padding: 12px 16px;
-            border-radius: 16px;
-            max-width: 75%;
-            word-wrap: break-word;
-            display: inline-block;
-            position: relative; //Ensures proper spacing
-        }
-
-        //User message on the right
-        .user {
-            background-color: var(--user-bg);
-            color: white;
-            align-self: flex-end;
-            border-top-right-radius: 2px; //Slight styling variation
-            margin-left: auto;
-        }
-
-        //Bot message on the left
-        .bot {
-            background-color: var(--bot-bg);
-            color: var(--text-color);
-            align-self: flex-start;
-            border-top-left-radius: 2px; //Slight styling variation
-            margin-right: auto;
-        } */
 
         #messages {
             flex-grow: 1;
@@ -160,6 +130,14 @@
         .message-container.bot {
             justify-content: flex-start;
             padding-right: .5%; /* Pushes bot messages to the left */
+        }
+
+        /* Chatbot Icon */
+        .bot-icon {
+            width: 40px; /* Adjust icon size */
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
 
         /* Chat Message Bubbles */
@@ -269,6 +247,7 @@
         <button id="refresh">Refresh Chat</button>
     </div>
 
+    <h2 id="chatbot-name">MediBot</h2>
     <div id="chat-container">
         <div id="messages"></div>
         <div id="input-area">
@@ -435,6 +414,15 @@
             const messageContainer = document.getElementById("messages");
             const containerDiv = document.createElement("div"); // New wrapper for messages
             containerDiv.classList.add("message-container", sender);
+
+            // If bot, add an icon
+            if (sender === "bot") {
+                const botIcon = document.createElement("img");
+                botIcon.src = "https://imgur.com/XjBpxoP"; // Make sure the path matches
+                botIcon.alt = "Chatbot Icon";
+                botIcon.classList.add("bot-icon");
+                containerDiv.appendChild(botIcon);
+            }
 
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
