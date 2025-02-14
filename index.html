@@ -192,18 +192,28 @@
         #input-area {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+        }
+
+        /* Ensure the input field and button are properly aligned */
+        #input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between input and button */
         }
 
         /* Input field */
         #user-input {
             flex: 1; /* Makes input take remaining space */
-            padding: 10px;
+            padding: 12px;
             border: 2px solid var(--bot-bg);
             border-radius: 5px;
             background: var(--bg-color);
             color: var(--text-color);
             outline: none;
+            font-size: 16px;
+            width: 70%; /* Make it shorter */
+            min-width: 250px;
         }
 
         /* Send button (smaller and next to input) */
@@ -229,6 +239,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
+            justify-content: center; /* Center the suggestions */
         }
 
         .suggestion {
@@ -307,10 +318,12 @@
         <div id="messages"></div>
         <div id="input-area">
             <div id="suggestions"></div>
-            <input type="text" id="user-input" placeholder="Type a message...">
-            <button id="send-button">
-                <img src="https://cdn3.iconfinder.com/data/icons/infinity-ink-office/48/005_090_paper_plane_send_message-1024.png" alt="Send">
-            </button>
+            <div id="input-wrapper">
+                <input type="text" id="user-input" placeholder="Type a message...">
+                <button id="send-button">
+                    <img src="https://cdn3.iconfinder.com/data/icons/infinity-ink-office/48/005_090_paper_plane_send_message-1024.png" alt="Send">
+                </button>
+            </div>
         </div>
     </div>
 
