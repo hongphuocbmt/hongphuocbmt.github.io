@@ -294,13 +294,14 @@
         // Initialize available suggestions
         function resetSuggestions() {
             for (let topic in topicSuggestions) {
-                availableSuggestions[topic] = [...topicSuggestions[topic]];
+                // availableSuggestions[topic] = [...topicSuggestions[topic]];
+                availableSuggestions[topic] = 0; //start at the first suggestion
             }
         }
         resetSuggestions();
 
         // Display one random suggestion at a time
-        function displayRandomSuggestion(topic) {
+        /*function displayRandomSuggestion(topic) {
             const suggestions = availableSuggestions[topic];
             if (!suggestions || suggestions.length === 0) {
                 suggestionsDiv.innerHTML = ""; // Clear if no suggestions are left
@@ -326,7 +327,15 @@
                 displayRandomSuggestion(topic); // Generate a new suggestion
             });
             suggestionsDiv.appendChild(suggestion);
-        }
+        }*/
+
+        // display next suggestion
+        function displayNextSuggestion(topic) {
+            const suggestions = topicSuggestions[topic];
+            if (!suggestions || suggestions.length === 0) {
+                suggestionsDiv.innerHTML = ""; // Clear if no suggestions
+                return;
+            }
 
 
         // Handle topic selection
