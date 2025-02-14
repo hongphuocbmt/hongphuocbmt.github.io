@@ -56,16 +56,30 @@
             z-index: 1000;
         }
 
+       /* Align Menu Button and Chatbot Name */
+        #header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+        /* Menu Button Styling */
         #menu-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
             background: var(--button-bg);
             color: var(--button-text);
             border: none;
             border-radius: 8px;
             padding: 10px 15px;
             cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Align Chatbot Name to the Right of Menu Button */
+        #chatbot-name {
+            font-size: 20px; /* Keep the same size */
+            font-weight: bold;
+            margin-left: 10px; /* Adjust spacing from menu button */
         }
 
         #menu-button:hover {
@@ -88,7 +102,7 @@
             background: var(--bg-color);
             border-radius: 10px;
             padding: 15px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: none; /* Removes the shadow */
             display: flex;
             flex-direction: column;
             height: 80vh;
@@ -219,8 +233,11 @@
     </style>
 </head>
 <body>
-    <button id="menu-button">☰ Menu</button>
-
+    <div id="header">
+        <button id="menu-button">☰</button>
+        <span id="chatbot-name">Virtual Doctor</span>
+    </div>
+    
     <div id="menu">
         <h3>Settings</h3>
         <label for="agent">Select Agent:</label>
