@@ -191,15 +191,17 @@
 
         #input-area {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            gap: 8px; /* Space between suggestions and input field */
+            width: 100%;
         }
 
         /* Ensure the input field and button are properly aligned */
         #input-wrapper {
             display: flex;
             align-items: center;
-            gap: 8px; /* Space between input and button */
+            gap: 8px;
+            width: 100%;
         }
 
         /* Input field */
@@ -212,14 +214,14 @@
             color: var(--text-color);
             outline: none;
             font-size: 16px;
-            width: 70%; /* Make it shorter */
-            min-width: 250px;
+            width: 90%; /* Make it shorter */
+            min-width: 300px;
         }
 
         /* Send button (smaller and next to input) */
         #send-button {
-            width: 40px; /* Smaller button */
-            height: 40px;
+            width: 50px; /* Smaller button */
+            height: 50px;
             background: var(--button-bg);
             border: none;
             border-radius: 50%; /* Makes it round */
@@ -231,15 +233,17 @@
 
         /* Paper airplane icon */
         #send-button img {
-            width: 20px; /* Icon size */
-            height: 20px;
+            width: 23px; /* Icon size */
+            height: 23px;
         }
 
         #suggestions {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 8px;
+            width: 100%;
             justify-content: center; /* Center the suggestions */
+            margin-bottom: 5px; /* Add some space between suggestions and input field */
         }
 
         .suggestion {
@@ -247,9 +251,11 @@
             color: var(--button-text);
             border: 1px solid var(--text-color);
             border-radius: 5px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
+            text-align: center;
+            white-space: nowrap; /* Prevents wrapping within individual buttons */
         }
 
         .suggestion:hover {
