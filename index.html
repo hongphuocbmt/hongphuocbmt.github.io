@@ -460,6 +460,9 @@
                 }
 
                 const data = await response.json();
+
+                console.log("Raw Dialogflow Response:", data); // 👈 Logs raw output to browser console
+
                 if (data.reply) {
                     addMessage(data.reply, "bot"); // Display bot response
                 } else {
