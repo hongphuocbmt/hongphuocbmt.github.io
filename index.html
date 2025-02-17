@@ -463,10 +463,15 @@
 
                 console.log("Raw Dialogflow Response:", data); // 👈 Logs raw output to browser console
 
-                if (data.reply) {
-                    addMessage(data.reply, "bot"); // Display bot response
+                //if (data.reply) {
+                    //addMessage(data.reply, "bot"); // Display bot response
+                //} else {
+                    //addMessage("⚠️ Error: No response from bot.", "bot");
+                //}
+                if (data.richText) {
+                    addMessage(data.richText, "bot"); // ✅ Use rich text if available
                 } else {
-                    addMessage("⚠️ Error: No response from bot.", "bot");
+                    addMessage(data.reply, "bot"); // Fallback to plain text
                 }
             } catch (error) {
                 console.error("Error:", error);
@@ -505,7 +510,7 @@
 
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
-            messageDiv.textContent = ""; // Ensure it's empty at the start
+            //messageDiv.textContent = ""; // Ensure it's empty at the start
             containerDiv.appendChild(messageDiv);
             messageContainer.appendChild(containerDiv);
             messageContainer.scrollTop = messageContainer.scrollHeight;
@@ -514,7 +519,8 @@
                 let index = 0;
                 function typeEffect() {
                     if (index < text.length) {
-                        messageDiv.textContent += text.charAt(index);
+                        //messageDiv.textContent += text.charAt(index);
+                        messageDiv.innerHTML = text.substring(0, index + 1);
                         index++;
                         setTimeout(typeEffect, 20); // Adjust speed (lower is faster)
                         scrollToBottom(); // Ensure scrolling happens smoothly
@@ -522,7 +528,8 @@
                 }
                 setTimeout(typeEffect, 30); // Start typing effect immediately
             } else {
-                messageDiv.textContent = text; // Instant display for user messages
+                //messageDiv.textContent = text; // Instant display for user messages
+                messageDiv.innerHTML = text;
                 scrollToBottom(); // Ensure scrolling happens smoothly
             }
 
