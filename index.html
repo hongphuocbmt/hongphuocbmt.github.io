@@ -520,7 +520,7 @@
                 function typeEffect() {
                     if (index < text.length) {
                         //messageDiv.textContent += text.charAt(index);
-                        messageDiv.innerHTML = text.substring(0, index + 1);
+                        messageDiv.innerHTML = text.substring(0, index + 1).replace(/\n/g, "<br>");;
                         index++;
                         setTimeout(typeEffect, 20); // Adjust speed (lower is faster)
                         scrollToBottom(); // Ensure scrolling happens smoothly
@@ -529,7 +529,7 @@
                 setTimeout(typeEffect, 30); // Start typing effect immediately
             } else {
                 //messageDiv.textContent = text; // Instant display for user messages
-                messageDiv.innerHTML = text;
+                messageDiv.innerHTML = text.replace(/\n/g, "<br>");;
                 scrollToBottom(); // Ensure scrolling happens smoothly
             }
 
