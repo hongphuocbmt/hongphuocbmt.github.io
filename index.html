@@ -296,20 +296,14 @@
     
     <div id="menu">
         <h3>Settings</h3>
-        <label for="agent">Select Agent:</label>
-        <select id="agent">
-            <option value="agent1">Agent 1</option>
-            <option value="agent2">Agent 2</option>
-            <option value="agent3">Agent 3</option>
-            <option value="agent4">Agent 4</option>
-        </select>
 
         <label for="topics">Select Topic:</label>
         <select id="topics">
-            <option value="topic1">Heart Attack</option>
-            <option value="topic2">Hepatitis C</option>
-            <option value="topic3">Cancer</option>
-            <option value="topic4">Hypothyroidism</option>
+            <option value="topic1">Select a Topic</option>
+            <option value="topic2">Heart Attack</option>
+            <option value="topic3">Hepatitis C</option>
+            <option value="topic4">Cancer</option>
+            <option value="topic5">Hypothyroidism</option>
         </select>
 
         <label>
@@ -335,10 +329,11 @@
 
     <script>
         const topicSuggestions = {
-            topic1: ["What Is a Heart Attack?", "What are the symptoms of a heart attack?", "What is the most common cause of a heart attack?", "What are the risk factors for heart attacks?","What are some ways to prevent heart attacks?"],
-            topic2: ["What is Hepatitis C?", "How is Hepatitis C Spread?", "What Are the Symptoms of Hepatitis C?","What Other Problems Can Hepatitis C Cause?","What Are the Treatments for Hepatitis C?"],
-            topic3: ["What kinds of cancer are more common in young adults?", "Are there ways to prevent breast cancer?", "How do I know if something on my skin might be melanoma?","How do doctors treat cancer?","What’s the difference between chemotherapy and radiotherapy?"],
-            topic4: ["What is Hypothyroidism?", "What causes hypothyroidism?", "What are the symptoms of hypothyroidism?", "What other problems can hypothyroidism cause?","What are the treatments for hypothyroidism?"],
+            topic1: [],
+            topic2: ["What Is a Heart Attack?", "What are the symptoms of a heart attack?", "What is the most common cause of a heart attack?", "What are the risk factors for heart attacks?","What are some ways to prevent heart attacks?"],
+            topic3: ["What is Hepatitis C?", "How is Hepatitis C Spread?", "What Are the Symptoms of Hepatitis C?","What Other Problems Can Hepatitis C Cause?","What Are the Treatments for Hepatitis C?"],
+            topic4: ["What kinds of cancer are more common in young adults?", "Are there ways to prevent breast cancer?", "How do I know if something on my skin might be melanoma?","How do doctors treat cancer?","What’s the difference between chemotherapy and radiotherapy?"],
+            topic5: ["What is Hypothyroidism?", "What causes hypothyroidism?", "What are the symptoms of hypothyroidism?", "What other problems can hypothyroidism cause?","What are the treatments for hypothyroidism?"],
         };
 
         const availableSuggestions = {};
